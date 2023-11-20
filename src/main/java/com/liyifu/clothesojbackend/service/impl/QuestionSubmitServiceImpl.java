@@ -109,9 +109,15 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         return queryWrapper;
     }
 
+    /**
+     * 获取脱敏后的题目提交信息
+     * @param questionSubmit
+     * @param loginUser
+     * @return
+     */
     @Override
     public QuestionSubmitVO getQuestionSubmitVO(QuestionSubmit questionSubmit, User loginUser) {
-         
+        return null;
     }
 
     @Override
