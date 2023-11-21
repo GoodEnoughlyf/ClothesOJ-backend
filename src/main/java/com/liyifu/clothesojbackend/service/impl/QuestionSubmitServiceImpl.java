@@ -120,6 +120,12 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         return null;
     }
 
+    /**
+     * 分页获取脱敏后的题目提交信息
+     * @param questionSubmitPage
+     * @param loginUser
+     * @return
+     */
     @Override
     public Page<QuestionSubmitVO> getQuestionSubmitPage(Page<QuestionSubmit> questionSubmitPage, User loginUser) {
         return null;
