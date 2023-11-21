@@ -158,7 +158,6 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
                         questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser))
                 .collect(Collectors.toList());
 
-        //将脱敏后的list装进Page<QuestionSubmitVO>
         questionSubmitVOPage.setRecords(questionSubmitVOList);
         return questionSubmitVOPage;
     }
