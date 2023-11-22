@@ -103,16 +103,14 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         Long userId = questionSubmitQueryRequest.getUserId();
         Long questionId = questionSubmitQueryRequest.getQuestionId();
         String submitLanguage = questionSubmitQueryRequest.getSubmitLanguage();
-        long current = questionSubmitQueryRequest.getCurrent();
-        long pageSize = questionSubmitQueryRequest.getPageSize();
         String sortField = questionSubmitQueryRequest.getSortField();
         String sortOrder = questionSubmitQueryRequest.getSortOrder();
 
         queryWrapper.eq(StringUtils.isNotBlank(submitLanguage), "submitLanguage", submitLanguage)
-                .eq(ObjectUtils.isNotEmpty(userId), "userId", userId)
-                .eq(ObjectUtils.isNotEmpty(questionId), "questionId", questionId)
+                .eq(ObjectUtils.isNotEmpty(userId),"userId", userId)
+                .eq(ObjectUtils.isNotEmpty(questionId),"questionId", questionId)
                 .eq("isDelete", false)
-                .orderBy(SqlUtils.validSortField(sortField), sortField.equals("ascend"), sortOrder);
+                .orderBy(SqlUtils.validSortField(sortField), sortOrder.equals("ascend"), sortField);
 
         return queryWrapper;
     }
@@ -143,7 +141,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
      * @return
      */
     @Override
-    public Page<QuestionSubmitVO> getQuestionSubmitPage(Page<QuestionSubmit> questionSubmitPage, User loginUser) {
+    public Page<QuestionSubmitVO> getQuestionSubmitVOPage(Page<QuestionSubmit> questionSubmitPage, User loginUser) {
         //获取Page<QuestionSubmit>中的数据list
         List<QuestionSubmit> questionSubmitList = questionSubmitPage.getRecords();
         long current = questionSubmitPage.getCurrent();

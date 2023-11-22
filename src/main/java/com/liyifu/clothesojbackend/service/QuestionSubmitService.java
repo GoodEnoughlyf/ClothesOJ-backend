@@ -35,5 +35,5 @@ public interface QuestionSubmitService extends IService<QuestionSubmit> {
     /**
      * 分页获取脱敏后的题目提交信息
      */
-    Page<QuestionSubmitVO> getQuestionSubmitPage(Page<QuestionSubmit> questionSubmitPage,User loginUser);
+    Page<QuestionSubmitVO> getQuestionSubmitVOPage(Page<QuestionSubmit> questionSubmitPage,User loginUser);
 }

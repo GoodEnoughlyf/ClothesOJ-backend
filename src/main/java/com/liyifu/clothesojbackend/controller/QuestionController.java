@@ -9,10 +9,15 @@ import com.liyifu.clothesojbackend.common.ResultUtils;
 import com.liyifu.clothesojbackend.constant.UserConstant;
 import com.liyifu.clothesojbackend.exception.BusinessException;
 import com.liyifu.clothesojbackend.model.dto.question.*;
+import com.liyifu.clothesojbackend.model.dto.questionsubmit.QuestionSubmitAddRequest;
+import com.liyifu.clothesojbackend.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.liyifu.clothesojbackend.model.entity.Question;
+import com.liyifu.clothesojbackend.model.entity.QuestionSubmit;
 import com.liyifu.clothesojbackend.model.entity.User;
+import com.liyifu.clothesojbackend.model.vo.QuestionSubmitVO;
 import com.liyifu.clothesojbackend.model.vo.QuestionVO;
 import com.liyifu.clothesojbackend.service.QuestionService;
+import com.liyifu.clothesojbackend.service.QuestionSubmitService;
 import com.liyifu.clothesojbackend.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -32,6 +37,9 @@ public class QuestionController {
 
     @Resource
     private QuestionService questionService;
+
+    @Resource
+    private QuestionSubmitService questionSubmitService;
 
     /**
      * 创建题目
@@ -291,12 +299,33 @@ public class QuestionController {
     /**
      * 提交题目
      */
-//    @PostMapping("/question_submit/do")
-//    public BaseResponse<Long> doQuestionSubmit(){
-//
-//    }
+    @PostMapping("/question_submit/do")
+    public BaseResponse<Long> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest, HttpServletRequest request){
+        if(questionSubmitAddRequest==null || questionSubmitAddRequest.getQuestionId()<=0){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        //登录才能提交
+        User loginUser = userService.getLoginUser(request);
+        Long questionSubmitId = questionSubmitService.doSubmitQuestion(questionSubmitAddRequest, loginUser);
+        return ResultUtils.success(questionSubmitId);
+
+    }
 
     /**
      * 分页获取题目提交列表（除了管理员和自己外，其他用户只能看到非答案、提交代码的公开信息）
      */
+    @PostMapping("/question_submit/list/page")
+    public BaseResponse<Page<QuestionSubmitVO>> getQuestionSubmitPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,HttpServletRequest request){
+        long current = questionSubmitQueryRequest.getCurrent();
+        long pageSize = questionSubmitQueryRequest.getPageSize();
+
+        Page<QuestionSubmit> questionSubmitPage = questionSubmitService.page(new Page<>(current, pageSize), questionSubmitService.getQuestionSubmitQueryWrapper(questionSubmitQueryRequest));
+
+        //获取登录用户
+        User loginUser = userService.getLoginUser(request);
+
+        //对用户数据进行脱敏
+        Page<QuestionSubmitVO> questionSubmitVOPage = questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, loginUser);
+        return ResultUtils.success(questionSubmitVOPage);
+    }
 }
