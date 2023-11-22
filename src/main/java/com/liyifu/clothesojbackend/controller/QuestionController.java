@@ -203,7 +203,7 @@ public class QuestionController {
      * 分页后去脱敏后的题目列表信息
      */
     @PostMapping("/list/page/vo")
-    public BaseResponse<Page<QuestionVO>> getQuestionVOPage(@RequestBody QuestionQueryRequest questionQueryRequest){
+    public BaseResponse<Page<QuestionVO>> listQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest){
         long current = questionQueryRequest.getCurrent();
         long pageSize = questionQueryRequest.getPageSize();
         Page<Question> questionPage = questionService.page(new Page<>(current, pageSize), questionService.getQueryWrapper(questionQueryRequest));
@@ -215,7 +215,7 @@ public class QuestionController {
      * 分页获取当前用户创建的 脱敏后的题目信息
      */
     @PostMapping("/my/list/page/vo")
-    public BaseResponse<Page<QuestionVO>> getMyQuestionVOPage(@RequestBody QuestionQueryRequest questionQueryRequest,HttpServletRequest request){
+    public BaseResponse<Page<QuestionVO>> listMyQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,HttpServletRequest request){
         if(questionQueryRequest==null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -235,7 +235,7 @@ public class QuestionController {
      */
     @PostMapping("/list/page")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Page<Question>> getQuestionPage(@RequestBody QuestionQueryRequest questionQueryRequest,HttpServletRequest request){
+    public BaseResponse<Page<Question>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest,HttpServletRequest request){
         if(questionQueryRequest==null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -315,7 +315,7 @@ public class QuestionController {
      * 分页获取题目提交列表（除了管理员和自己外，其他用户只能看到非答案、提交代码的公开信息）
      */
     @PostMapping("/question_submit/list/page")
-    public BaseResponse<Page<QuestionSubmitVO>> getQuestionSubmitPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,HttpServletRequest request){
+    public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,HttpServletRequest request){
         long current = questionSubmitQueryRequest.getCurrent();
         long pageSize = questionSubmitQueryRequest.getPageSize();
 

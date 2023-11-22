@@ -222,7 +222,7 @@ public class UserController {
      */
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     @GetMapping("/list/page")
-    public BaseResponse<Page<User>> getUserListByPage(@RequestBody UserQueryRequest userQueryRequest, HttpServletRequest request) {
+    public BaseResponse<Page<User>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest, HttpServletRequest request) {
         if (userQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -248,7 +248,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/list/page/vo")
-    public BaseResponse<Page<UserVO>> getUserVOListByPage(@RequestBody UserQueryRequest userQueryRequest, HttpServletRequest request) {
+    public BaseResponse<Page<UserVO>> listUserVOByPage(@RequestBody UserQueryRequest userQueryRequest, HttpServletRequest request) {
         if (userQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
