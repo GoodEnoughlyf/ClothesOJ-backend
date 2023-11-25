@@ -10,10 +10,10 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   # session ??
-#  session:
-#    store-type: redis
-#    # 30 ???
-#    timeout: 2592000
+  #  session:
+  #    store-type: redis
+  #    # 30 ???
+  #    timeout: 2592000
   # ?????
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -42,9 +42,9 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
-      logic-delete-field: isDelete # ????????????
-      logic-delete-value: 1 # ?????????? 1?
-      logic-not-delete-value: 0 # ?????????? 0?
-#??????
+      logic-delete-field: isDelete # 逻辑删除
+      logic-delete-value: 1 # 表示已经删除
+      logic-not-delete-value: 0 # 未删除
+#代码沙箱类型
 codesandbox:
   type: remote

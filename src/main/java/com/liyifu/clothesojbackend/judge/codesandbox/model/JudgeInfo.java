@@ -1,4 +1,4 @@
-package com.liyifu.clothesojbackend.judge;
+package com.liyifu.clothesojbackend.judge.codesandbox.model;
 
 import lombok.Data;
 

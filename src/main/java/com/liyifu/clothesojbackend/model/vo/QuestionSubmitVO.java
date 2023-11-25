@@ -1,7 +1,7 @@
 package com.liyifu.clothesojbackend.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.liyifu.clothesojbackend.judge.JudgeInfo;
+import com.liyifu.clothesojbackend.judge.codesandbox.model.JudgeInfo;
 import com.liyifu.clothesojbackend.model.entity.QuestionSubmit;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
