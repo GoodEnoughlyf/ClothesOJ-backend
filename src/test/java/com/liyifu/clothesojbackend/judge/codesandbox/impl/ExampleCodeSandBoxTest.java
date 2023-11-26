@@ -2,6 +2,7 @@ package com.liyifu.clothesojbackend.judge.codesandbox.impl;
 
 import com.liyifu.clothesojbackend.judge.codesandbox.CodeSandBox;
 import com.liyifu.clothesojbackend.judge.codesandbox.CodeSandBoxFactory;
+import com.liyifu.clothesojbackend.judge.codesandbox.CodeSandBoxProxy;
 import com.liyifu.clothesojbackend.judge.codesandbox.model.ExecuteCodeRequest;
 import com.liyifu.clothesojbackend.judge.codesandbox.model.ExecuteCodeResponse;
 import com.liyifu.clothesojbackend.model.enums.QuestionSubmitLanguageEnum;
@@ -46,7 +47,6 @@ class ExampleCodeSandBoxTest {
      */
     @Test
     void executeCodeByFactory(){
-        System.out.println(type);
         CodeSandBox codeSandBox = CodeSandBoxFactory.newInstance(type);
         String code="int main() {}";
         String language= QuestionSubmitLanguageEnum.JAVA.getValue();
@@ -57,6 +57,25 @@ class ExampleCodeSandBoxTest {
         executeCodeRequest.setInputList(inputList);
 
         ExecuteCodeResponse executeCodeResponse = codeSandBox.executeCode(executeCodeRequest);
+        Assertions.assertNotNull(executeCodeResponse);
+    }
+
+    /**
+     * 根据代理模式执行代码沙箱
+     */
+    @Test
+    void executeCodeByProxy(){
+        CodeSandBox codeSandBox = CodeSandBoxFactory.newInstance(type);
+        CodeSandBoxProxy proxy=new CodeSandBoxProxy(codeSandBox);
+        String code="int main() {}";
+        String language= QuestionSubmitLanguageEnum.JAVA.getValue();
+        List<String> inputList = Arrays.asList("1 2", "3 4");
+        ExecuteCodeRequest executeCodeRequest = new ExecuteCodeRequest();
+        executeCodeRequest.setCode(code);
+        executeCodeRequest.setLanguage(language);
+        executeCodeRequest.setInputList(inputList);
+
+        ExecuteCodeResponse executeCodeResponse = proxy.executeCode(executeCodeRequest);
         Assertions.assertNotNull(executeCodeResponse);
     }
 }
