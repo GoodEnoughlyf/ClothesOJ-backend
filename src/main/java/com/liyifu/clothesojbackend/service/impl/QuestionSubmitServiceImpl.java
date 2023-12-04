@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.liyifu.clothesojbackend.common.ErrorCode;
 import com.liyifu.clothesojbackend.exception.BusinessException;
+import com.liyifu.clothesojbackend.judge.JudgeService;
 import com.liyifu.clothesojbackend.mapper.QuestionSubmitMapper;
 import com.liyifu.clothesojbackend.model.dto.question.QuestionQueryRequest;
 import com.liyifu.clothesojbackend.model.dto.questionsubmit.QuestionSubmitAddRequest;
@@ -22,10 +23,12 @@ import com.liyifu.clothesojbackend.utils.SqlUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +45,10 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
 
     @Resource
     private UserService userService;
+
+    @Resource
+    @Lazy
+    private JudgeService judgeService;
 
     /**
      * 提交题目
@@ -81,8 +88,9 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         }
         //4、异步执行判题服务  todo (搞懂异步的过程写法）
         Long questionSubmitId = questionSubmit.getId();
-
-
+        CompletableFuture.runAsync(()->{
+            judgeService.doJudge(questionSubmitId);
+        });
         return questionSubmitId;
     }
 

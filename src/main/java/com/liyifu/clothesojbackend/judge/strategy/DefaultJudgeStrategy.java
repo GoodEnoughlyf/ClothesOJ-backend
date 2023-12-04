@@ -1,0 +1,67 @@
+package com.liyifu.clothesojbackend.judge.strategy;
+
+import cn.hutool.json.JSONUtil;
+import com.liyifu.clothesojbackend.judge.codesandbox.model.JudgeInfo;
+import com.liyifu.clothesojbackend.model.dto.question.JudgeCase;
+import com.liyifu.clothesojbackend.model.dto.question.JudgeConfig;
+import com.liyifu.clothesojbackend.model.entity.Question;
+import com.liyifu.clothesojbackend.model.enums.JudgeInfoMessageEnum;
+import org.springframework.beans.BeanUtils;
+
+import java.util.List;
+
+public class DefaultJudgeStrategy implements JudgeStrategy {
+    @Override
+    public JudgeInfo doJudge(JudgeContext judgeContext) {
+        Question question = judgeContext.getQuestion();
+        JudgeInfo judgeInfo = judgeContext.getJudgeInfo();
+        List<String> inputList = judgeContext.getInputList();
+        List<String> outputList = judgeContext.getOutputList();
+        List<JudgeCase> judgeCaseList = judgeContext.getJudgeCaseList();
+        //默认返回成功信息
+        JudgeInfoMessageEnum judgeInfoMessageEnum = JudgeInfoMessageEnum.ACCEPTED;
+        Long memory = judgeInfo.getMemory();
+        Long time = judgeInfo.getTime();
+        //用于返回的judgeInfo信息
+        JudgeInfo judgeInfoResponse = new JudgeInfo();
+        judgeInfoResponse.setMemory(memory);
+        judgeInfoResponse.setTime(time);
+
+
+        //判断输入沙箱的输入用例和输出用例数量是否相同
+        if (inputList.size() != outputList.size()) {
+            judgeInfoMessageEnum = JudgeInfoMessageEnum.WRONG_ANSWER;
+            judgeInfoResponse.setMessage(judgeInfoMessageEnum.getValue());
+            return judgeInfoResponse;
+        }
+
+        //比较每一项的输出结果是否与输入用例的预期结果相同
+        for (int i = 0; i < outputList.size(); i++) {
+            JudgeCase judgeCase = judgeCaseList.get(i);
+            if (!judgeCase.getOutput().equals(outputList.get(i))) {
+                judgeInfoMessageEnum = JudgeInfoMessageEnum.WRONG_ANSWER;
+                judgeInfoResponse.setMessage(judgeInfoMessageEnum.getValue());
+                return judgeInfoResponse;
+            }
+        }
+
+        //获取题目要求的配置 并且判断是否符合要求
+        String jsonJudgeConfig = question.getJudgeConfig();
+        JudgeConfig judgeConfig = JSONUtil.toBean(jsonJudgeConfig, JudgeConfig.class);
+        Long timeLimit = judgeConfig.getTimeLimit();
+        Long memoryLimit = judgeConfig.getMemoryLimit();
+        if (memory > memoryLimit) {
+            judgeInfoMessageEnum = JudgeInfoMessageEnum.MEMORY_LIMIT_EXCEED;
+            judgeInfoResponse.setMessage(judgeInfoMessageEnum.getValue());
+            return judgeInfoResponse;
+        }
+        if (time > timeLimit) {
+            judgeInfoMessageEnum = JudgeInfoMessageEnum.TIME_LIMIT_EXCEED;
+            judgeInfoResponse.setMessage(judgeInfoMessageEnum.getValue());
+            return judgeInfoResponse;
+        }
+
+        judgeInfoResponse.setMessage(judgeInfoMessageEnum.getValue());
+        return judgeInfoResponse;
+    }
+}
