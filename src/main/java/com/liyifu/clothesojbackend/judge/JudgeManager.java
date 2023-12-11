@@ -3,6 +3,7 @@ package com.liyifu.clothesojbackend.judge;
 import com.liyifu.clothesojbackend.judge.codesandbox.model.JudgeInfo;
 import com.liyifu.clothesojbackend.judge.strategy.*;
 import com.liyifu.clothesojbackend.model.entity.QuestionSubmit;
+import org.springframework.stereotype.Service;
 
 /**
  * 判题策略管理
@@ -11,6 +12,7 @@ import com.liyifu.clothesojbackend.model.entity.QuestionSubmit;
  *
  * 目的是尽量简化对判题功能的调用，让调用方写最少的代码、调用最简单。对于判题策略的选取，也是在 JudgeManager 里处理的。
  */
+@Service
 public class JudgeManager {
     JudgeInfo doJudge(JudgeContext judgeContext){
         QuestionSubmit questionSubmit = judgeContext.getQuestionSubmit();

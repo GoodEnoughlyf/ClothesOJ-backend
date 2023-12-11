@@ -47,4 +47,4 @@ mybatis-plus:
       logic-not-delete-value: 0 # 未删除
 #代码沙箱类型
 codesandbox:
-  type: example
+  type: remote

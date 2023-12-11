@@ -13,10 +13,12 @@ import com.liyifu.clothesojbackend.judge.strategy.JudgeContext;
 import com.liyifu.clothesojbackend.model.dto.question.JudgeCase;
 import com.liyifu.clothesojbackend.model.entity.Question;
 import com.liyifu.clothesojbackend.model.entity.QuestionSubmit;
+import com.liyifu.clothesojbackend.model.enums.QuestionSubmitLanguageEnum;
 import com.liyifu.clothesojbackend.model.enums.QuestionSubmitStatusEnum;
 import com.liyifu.clothesojbackend.service.QuestionService;
 import com.liyifu.clothesojbackend.service.QuestionSubmitService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 /**
  * 判题服务实现类
  */
+
+@Service
 public class JudgeServiceImpl implements JudgeService {
 
     //代码沙箱类型
@@ -59,7 +63,7 @@ public class JudgeServiceImpl implements JudgeService {
         }
 
         //2）如果题目提交状态不为等待中，就不用重复执行了
-        if (!(questionSubmit.getSubmitState()).equals(QuestionSubmitStatusEnum.WAITING.getValue())) {
+        if (!questionSubmit.getSubmitState().equals(QuestionSubmitStatusEnum.WAITING.getValue())) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "正在判题中");
         }
         //3）更改判题（题目提交）的状态为 “判题中”，防止重复执行，也能让用户即时看到状态
@@ -75,7 +79,7 @@ public class JudgeServiceImpl implements JudgeService {
         CodeSandBox codeSandBox = CodeSandBoxFactory.newInstance(type);
         CodeSandBoxProxy codeSandBoxProxy = new CodeSandBoxProxy(codeSandBox);
         String submitCode = questionSubmit.getSubmitCode();
-        String submitLanguage = questionSubmit.getSubmitLanguage();
+        String submitLanguage = QuestionSubmitLanguageEnum.JAVA.getValue();
         String jsonJudgeCase = question.getJudgeCase();
         //数据库存储的判题用例是一个json数组字符串，将其转化为一个对象list
         List<JudgeCase> judgeCaseList = JSONUtil.toList(jsonJudgeCase, JudgeCase.class);

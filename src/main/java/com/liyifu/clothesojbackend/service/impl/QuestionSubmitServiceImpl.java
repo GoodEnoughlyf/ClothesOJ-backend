@@ -46,8 +46,8 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     @Resource
     private UserService userService;
 
-    @Resource
     @Lazy
+    @Resource
     private JudgeService judgeService;
 
     /**

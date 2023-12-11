@@ -6,9 +6,12 @@ import com.liyifu.clothesojbackend.model.dto.question.JudgeCase;
 import com.liyifu.clothesojbackend.model.dto.question.JudgeConfig;
 import com.liyifu.clothesojbackend.model.entity.Question;
 import com.liyifu.clothesojbackend.model.enums.JudgeInfoMessageEnum;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 public class JavaJudgeStrategy implements JudgeStrategy {
     @Override
     public JudgeInfo doJudge(JudgeContext judgeContext) {
@@ -19,8 +22,11 @@ public class JavaJudgeStrategy implements JudgeStrategy {
         List<JudgeCase> judgeCaseList = judgeContext.getJudgeCaseList();
         //默认返回成功信息
         JudgeInfoMessageEnum judgeInfoMessageEnum = JudgeInfoMessageEnum.ACCEPTED;
-        Long memory = judgeInfo.getMemory();
-        Long time = judgeInfo.getTime();
+//        Long memory = judgeInfo.getMemory();
+//        Long time = judgeInfo.getTime();
+        //todo 选择编程
+        Long memory = Optional.ofNullable(judgeInfo.getMemory()).orElse(0L) ;
+        Long time = Optional.ofNullable(judgeInfo.getTime()).orElse(0L) ;
         //用于返回的judgeInfo信息
         JudgeInfo judgeInfoResponse = new JudgeInfo();
         judgeInfoResponse.setMemory(memory);
@@ -37,7 +43,10 @@ public class JavaJudgeStrategy implements JudgeStrategy {
         //比较每一项的输出结果是否与输入用例的预期结果相同
         for (int i = 0; i < outputList.size(); i++) {
             JudgeCase judgeCase = judgeCaseList.get(i);
-            if (!judgeCase.getOutput().equals(outputList.get(i))) {
+            //代码沙箱返回的结果，个元素后面也会加上空行
+            String a = judgeCase.getOutput()+"\n";
+            String b = outputList.get(i);
+            if (!a.equals(b)) {
                 judgeInfoMessageEnum = JudgeInfoMessageEnum.WRONG_ANSWER;
                 judgeInfoResponse.setMessage(judgeInfoMessageEnum.getValue());
                 return judgeInfoResponse;
