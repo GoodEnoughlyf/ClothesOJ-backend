@@ -27,6 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+//@CrossOrigin(origins = "8.138.96.96:8080", allowCredentials = "true")
 @RestController
 @RequestMapping("/question")
 @Slf4j

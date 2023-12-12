@@ -43,8 +43,8 @@ public class JavaJudgeStrategy implements JudgeStrategy {
         //比较每一项的输出结果是否与输入用例的预期结果相同
         for (int i = 0; i < outputList.size(); i++) {
             JudgeCase judgeCase = judgeCaseList.get(i);
-            //代码沙箱返回的结果，个元素后面也会加上空行
-            String a = judgeCase.getOutput()+"\n";
+            //  (貌似是man.java中的sout会多一个空行)
+            String a = judgeCase.getOutput();
             String b = outputList.get(i);
             if (!a.equals(b)) {
                 judgeInfoMessageEnum = JudgeInfoMessageEnum.WRONG_ANSWER;

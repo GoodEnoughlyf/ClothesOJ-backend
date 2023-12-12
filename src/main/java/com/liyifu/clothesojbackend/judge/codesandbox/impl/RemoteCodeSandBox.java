@@ -17,7 +17,8 @@ public class RemoteCodeSandBox implements CodeSandBox {
     @Override
     public ExecuteCodeResponse executeCode(ExecuteCodeRequest executeCodeRequest) {
         System.out.println("远程代码沙箱");
-        String url="http://localhost:8090/executeCode";
+        String url="http://8.138.96.96:8090/executeCode";
+//        String url="http://localhost:8091/executeCode";
         String json = JSONUtil.toJsonStr(executeCodeRequest);
         String responseStr = HttpUtil.createPost(url)
                 .header(AUTH_REQUEST_HEADER, AUTH_REQUEST_SECRET)
